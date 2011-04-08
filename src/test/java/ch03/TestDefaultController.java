@@ -30,21 +30,21 @@ public class TestDefaultController {
 		this.controller = new DefaultController();
 		this.request = new SampleRequest();
 		this.handler = new SampleHandler();
+		
+		this.controller.addHandler(request, handler);
 	}
 
 	@Test
 	public void testAddHandler() {
-		IRequest request = new SampleRequest();
-		IRequestHandler handler = new SampleHandler();
-		this.controller.addHandler(request, handler);
 		IRequestHandler handler2 = this.controller.getHandler(request);
+		assertSame(handler2, handler);
+	}
+	
+	@Test
+	public void testProcessRequest(){
 		IResponse response = this.controller.processRequest(request);
 		assertNotNull("Must not return a null response", response);
 		assertEquals("Response should be of type SampleResponse",
 					 SampleResponse.class, response.getClass());
-		assertSame("Handler we set in controller should be " +
-				"the same handler we get",
-				handler2,
-				handler);
-		}
+	}
 }
