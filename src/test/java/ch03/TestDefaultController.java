@@ -23,6 +23,26 @@ public class TestDefaultController {
 	}
 
 	private class SampleResponse implements IResponse {
+		private static final String NAME = "Test";
+		
+		@Override
+		public String getName() {
+			return NAME;
+		}
+		
+		@Override
+		public boolean equals(Object object){
+			boolean result = false;
+			if(object instanceof SampleResponse){
+				result = ((SampleResponse)object).getName().equals(getName());
+			}
+			return result;
+		}
+		
+		@Override
+		public int hashCode(){
+			return NAME.hashCode();
+		}
 	}
 
 	@Before
@@ -44,7 +64,6 @@ public class TestDefaultController {
 	public void testProcessRequest(){
 		IResponse response = this.controller.processRequest(request);
 		assertNotNull("Must not return a null response", response);
-		assertEquals("Response should be of type SampleResponse",
-					 SampleResponse.class, response.getClass());
+		assertEquals(new SampleResponse(), response);
 	}
 }
