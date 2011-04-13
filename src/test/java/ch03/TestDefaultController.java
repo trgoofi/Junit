@@ -11,8 +11,19 @@ public class TestDefaultController {
 	private IRequestHandler handler;
 
 	private class SampleRequest implements IRequest {
+		private static final String DEFAULT_NAME = "Test";
+		private String name;
+		
+		public SampleRequest(String name){
+			this.name = name;
+		}
+		
+		public SampleRequest(){
+			this(DEFAULT_NAME);
+		}
+		
 		public String getName() {
-			return "Test";
+			return this.name;
 		}
 	}
 
@@ -22,6 +33,15 @@ public class TestDefaultController {
 		}
 	}
 
+	public class SampleExceptionHandler implements IRequestHandler{
+
+		@Override
+		public IResponse process(IRequest request) throws Exception {
+			throw new Exception("error processing request");
+		}
+		
+	}
+	
 	private class SampleResponse implements IResponse {
 		private static final String NAME = "Test";
 		
@@ -65,5 +85,15 @@ public class TestDefaultController {
 		IResponse response = this.controller.processRequest(request);
 		assertNotNull("Must not return a null response", response);
 		assertEquals(new SampleResponse(), response);
+	}
+	
+	@Test
+	public void testProcessRequestAnswersErrorResponse() {
+		SampleRequest request = new SampleRequest("testError");
+		SampleExceptionHandler handler = new SampleExceptionHandler();
+		this.controller.addHandler(request, handler);
+		IResponse response = this.controller.processRequest(request);
+		assertNotNull("Must not return a null response", response);
+		assertEquals(ErrorResponse.class, response.getClass());
 	}
 }
