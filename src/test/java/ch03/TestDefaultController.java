@@ -74,6 +74,21 @@ public class TestDefaultController {
 		this.controller.addHandler(request, handler);
 	}
 
+	@Test(timeout = 13)
+	public void testProcessMultipleRequestsTimeout(){
+		IRequest request;
+		IResponse response = new SampleResponse();
+		IRequestHandler handler = new SampleHandler();
+		
+		for(int i = 0; i < 99999; ++i){
+			request = new SampleRequest(String.valueOf(i));
+			this.controller.addHandler(request, handler);
+			response = this.controller.processRequest(request);
+			assertNotNull(response);
+			assertNotSame(ErrorResponse.class, response.getClass());
+		}
+	}
+	
 	@Test(expected = RuntimeException.class)
 	public void testGetHandlerNotDefined(){
 		SampleRequest request = new SampleRequest("testNotDefined");
