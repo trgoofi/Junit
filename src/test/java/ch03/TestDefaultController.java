@@ -74,6 +74,24 @@ public class TestDefaultController {
 		this.controller.addHandler(request, handler);
 	}
 
+	@Test(expected = RuntimeException.class)
+	public void testGetHandlerNotDefined(){
+		SampleRequest request = new SampleRequest("testNotDefined");
+		
+		// The following line is supposed to throw a RuntimeException
+		this.controller.getHandler(request);
+	}
+	
+	@Test(expected = RuntimeException.class)
+	public void testAddRequestDuplicateName(){
+		SampleRequest request = new SampleRequest();
+		SampleHandler handler = new SampleHandler();
+		
+		// The following line is supposed to throw a RuntionException
+		// instantiate() already add the default SampleHandler 
+		this.controller.addHandler(request, handler);
+	}
+	
 	@Test
 	public void testAddHandler() {
 		IRequestHandler handler2 = this.controller.getHandler(request);
