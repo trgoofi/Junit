@@ -3,6 +3,7 @@ package ch03;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestDefaultController {
@@ -75,6 +76,7 @@ public class TestDefaultController {
 	}
 
 	@Test(timeout = 13)
+	@Ignore(value = "Ignore for now until we decide a decent time-limit")
 	public void testProcessMultipleRequestsTimeout(){
 		IRequest request;
 		IResponse response = new SampleResponse();
